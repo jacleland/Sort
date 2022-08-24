@@ -24,6 +24,7 @@
 #include <vector>
 #include <iostream>
 #include <sstream>
+#include <fstream>
 //Project includes
 #include "sortalgorithm.h"
 
@@ -79,10 +80,11 @@ typedef IntArray_t::const_iterator IntArrayConstIterator_t;
  */
 class Sorter {
 	//Default values
-	const std::string	DefaultFileName 	= "isort.dat";
-	const std::string DefaultAlgo				= "radix";
-	const uint64_t 		DefaultDataMax 		= 1000;
-	const uint64_t 		DefaultNumValues 	= 1000;
+	const std::string	DefaultFileName 				= "isort.dat";
+	const std::string DefaultOutputFileName 	= "isort.sorted";
+	const std::string DefaultAlgo							= "radix";
+	const uint64_t 		DefaultDataMax 					= 1000;
+	const uint64_t 		DefaultNumValues 				= 1000;
 
 public:
 	/**	@brief	Default constructor */
@@ -134,15 +136,31 @@ private:
 	 */
 	void printArrayToConsole(const std::string& label, const IntArray_t& array);
 
+	/** @brief	Writes The contents of the array specified to a file.
+	 *	@param	array  The array to write to an output file
+	 */
+	void writeArrayToFile(const IntArray_t& array);
+
+	/** @brief  Prints the specified array to the output stream
+	 *  @param  out The output stream to which the array will be written
+	 *  @array  array The array to write to the output stream
+	 */
+	friend std::ostream& operator<<(std::ostream& out, const IntArray_t& array) {
+		return out;
+	}
+
 private:
-	int					argc_;					/*! Command line arg count */
-	char**			argv_;					/*! Command line argument array */
-	std::string algorithm_;			/*! Sort algorithm to use */
-	std::string	dataFileName_;	/*! Name of the input/output file for data */
-	bool				createData_;		/*! True if generating new data */
-	uint64_t		dataMax_;				/*! Maximum random value to gen */
-	uint64_t		numValues_;			/*! Number of values to generate */
-	bool				console_;				/*!	Print output to console? */
+	int						argc_;					/*! Command line arg count */
+	char**				argv_;					/*! Command line argument array */
+	std::string 	algorithm_;			/*! Sort algorithm to use */
+	std::string		dataFileName_;	/*! Name of the input/output file for data */
+	std::string		outputFileName_;/*! The name of the file to which we write sorted values */
+	std::ifstream ifs_;						/*! The input file stream for data */
+	std::ofstream ofs_;						/*! The output file stream if writing sorted data to file */
+	bool					createData_;		/*! True if generating new data */
+	uint64_t			dataMax_;				/*! Maximum random value to gen */
+	uint64_t			numValues_;			/*! Number of values to generate */
+	bool					console_;				/*!	Print output to console? */
 };
 
 }; //End namespace
